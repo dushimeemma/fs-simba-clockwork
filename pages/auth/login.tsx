@@ -32,7 +32,7 @@ const Login = ({ csrfToken }: ServerSideProps) => {
   const [logError, setLogError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const callbackUrl = typeof router.query?.callbackUrl === "string" ? router.query.callbackUrl : "/private";
+  const callbackUrl = typeof router.query?.callbackUrl === "string" ? router.query.callbackUrl : "/events";
 
   const handleLogin = async (data: User) => {
     const { email, password } = data;
