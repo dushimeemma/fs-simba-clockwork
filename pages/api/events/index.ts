@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
   if (req.method === "POST") {
-    const { date, name, email, guests, eventType: id, notes } = req.body;
+    const { date, time, name, email, guests, eventType: id, notes } = req.body;
     const { MAILTRAP_USER, MAILTRAP_PASSWORD, SENDER_EMAIL } = process.env;
 
     const eventType = await prisma.eventType.findUnique({
@@ -37,6 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       name: name,
       email: email,
       date: new Date(date),
+      time,
       guests: guests,
       notes: notes,
       eventTypeId: Number(id),

@@ -26,7 +26,7 @@ const Sidebar = () => {
               title="Event Types"
             />
             <ListItem
-              url="/bookings"
+              url="/events"
               imageUrl={<BackpackRoundedIcon width={20} height={20} />}
               title="Bookings"
             />
@@ -50,7 +50,7 @@ const Sidebar = () => {
             className="w-[80%] px-3 py-2 bg-secondary"
             onClick={() => {
               setIsLoggingOut(false);
-              router.push("/");
+              router.push("/api/auth/signout");
             }}>
             Logout
           </button>

@@ -1,22 +1,54 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import AddIcon from "@mui/icons-material/Add";
 import AttachmentOutlinedIcon from "@mui/icons-material/AttachmentOutlined";
 import KeyboardTabTwoToneIcon from "@mui/icons-material/KeyboardTabTwoTone";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
 import Sidebar from "@components/shared/Sidebar";
 
-const Home: NextPage = () => {
-  const { data: session, status } = useSession();
-  const loading = status === "loading";
+export interface userState {
+  id: number;
+  name: string;
+  duration: number;
+  createdAt: any;
+  updatedAt: any;
+  userId: number;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    password: string | null;
+    createdAt: any;
+    updatedAt: any;
+  };
+  events: any[];
+}
 
-  useEffect(() => {
-    if (session) window.location.replace("/private");
-  }, [loading, session]);
+const Home: NextPage = () => {
+  const router = useRouter();
+
+  const getAllEventTypes = async () => {
+    const { data } = await axios.get("/api/event-types");
+    return data;
+  };
+
+  const { data, isLoading } = useQuery("eventTypes", getAllEventTypes);
+
+  if (isLoading) {
+    return (
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  }
 
   return (
     <div className="flex flex-row items-start justify-between">
@@ -38,33 +70,48 @@ const Home: NextPage = () => {
             <AddIcon /> <span className="ml-2">New event type</span>
           </button>
         </div>
-        <div className="flex flex-row items-center justify-between w-full px-5 py-5 mt-10 bg-white border-2 border-secondary">
-          <div className="flex flex-col justify-between cursor-pointer">
-            <div className="flex flex-row my-2 text-xs">
-              <span className="font-bold">15 Min Meeting</span>
-              <span className="text-gray-300">/dushimeemma/15min</span>
+        {data.data.length &&
+          data.data.map((eventType: userState) => (
+            <div
+              className="flex flex-row items-center justify-between w-full px-5 py-5 mt-10 bg-white border-2 cursor-pointer border-secondary"
+              key={eventType.id}>
+              <div className="flex flex-col justify-between cursor-pointer">
+                <div className="flex flex-row my-2 text-xs">
+                  <span className="font-bold">{eventType.duration} Min Meeting</span>
+                  <span className="text-gray-300">
+                    /{eventType.user.name}/{eventType.duration}min
+                  </span>
+                </div>
+                <div className="flex flex-row items-center justify-start my-2 text-xs">
+                  <AccessTimeRoundedIcon className="w-[0.938rem] h-[0.938rem] text-gray-300" />
+                  <span className="ml-1 mr-3 text-gray-300">{eventType.duration}m</span>
+                  <PersonOutlineRoundedIcon className="w-[0.938rem] h-[0.938rem] text-gray-300" />
+                  <span className="ml-1 text-gray-300">1 on 1</span>
+                </div>
+              </div>
+              <div className="flex flex-row justify-between">
+                <button
+                  onClick={() =>
+                    router.push({
+                      pathname: `/${eventType.user.name
+                        .split(" ")[0]
+                        .toLocaleLowerCase()}${eventType.user.name
+                        .split(" ")[1]
+                        .toLocaleLowerCase()}/${eventType.name.split(" ")[0].toLocaleLowerCase()}`,
+                      query: { eventTypeId: eventType.id },
+                    })
+                  }>
+                  <KeyboardTabTwoToneIcon className="-rotate-45 w-[0.938rem] h-[0.938rem]" />
+                </button>
+
+                <button
+                  type="button"
+                  className="flex items-center justify-center w-10 h-10 mx-5 hover:border-2 hover:border-secondary">
+                  <AttachmentOutlinedIcon className="w-[0.938rem] h-[0.938rem] -rotate-45" />
+                </button>
+              </div>
             </div>
-            <div className="flex flex-row items-center justify-start my-2 text-xs">
-              <AccessTimeRoundedIcon className="w-[0.938rem] h-[0.938rem] text-gray-300" />
-              <span className="ml-1 mr-3 text-gray-300">15m</span>
-              <PersonOutlineRoundedIcon className="w-[0.938rem] h-[0.938rem] text-gray-300" />
-              <span className="ml-1 text-gray-300">1 on 1</span>
-            </div>
-          </div>
-          <div className="flex flex-row justify-between">
-            <a
-              target="_blank"
-              href="/dushimeemma/15min"
-              className="flex items-center justify-center w-10 h-10 mx-5 hover:border-2 hover:border-secondary">
-              <KeyboardTabTwoToneIcon className="-rotate-45 w-[0.938rem] h-[0.938rem]" />
-            </a>
-            <button
-              type="button"
-              className="flex items-center justify-center w-10 h-10 mx-5 hover:border-2 hover:border-secondary">
-              <AttachmentOutlinedIcon className="w-[0.938rem] h-[0.938rem] -rotate-45" />
-            </button>
-          </div>
-        </div>
+          ))}
       </div>
     </div>
   );

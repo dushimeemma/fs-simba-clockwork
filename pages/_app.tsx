@@ -7,7 +7,7 @@ import "../styles/globals.css";
 
 const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
@@ -16,6 +16,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
-}
+};
 
 export default MyApp;
