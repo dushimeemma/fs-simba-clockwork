@@ -22,7 +22,11 @@ interface User {
   email: string;
 }
 
-const Login = () => {
+interface ServerSideProps {
+  csrfToken: string;
+}
+
+const Login = ({ csrfToken }: ServerSideProps) => {
   const router = useRouter();
   const [logMessage, setLogMessage] = useState<string>("");
   const [logError, setLogError] = useState<string>("");
@@ -54,6 +58,8 @@ const Login = () => {
       return;
     }
   };
+
+  console.log({ csrfToken });
 
   return (
     <>
