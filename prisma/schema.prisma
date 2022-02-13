@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,12 +8,38 @@ datasource db {
 }
 
 model User {
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  password   String?
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  eventTypes EventType[]
+
+  @@map("users")
+}
+
+model EventType {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String   @unique
-  password  String?
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  duration  Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  events    Event[]
+}
 
-  @@map(name: "users")
+model Event {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String
+  guests      String[]
+  date        DateTime
+  time        String
+  notes       String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  eventTypeId Int
+  eventType   EventType @relation(fields: [eventTypeId], references: [id])
 }
