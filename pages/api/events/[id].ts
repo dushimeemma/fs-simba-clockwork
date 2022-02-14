@@ -6,8 +6,9 @@ import prisma from "@helpers/prisma";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     const { id } = req.query;
-    const event = await prisma.event.findFirst({
-      where: { id: Number(id) },
+
+    const event = await prisma.event.findMany({
+      where: { eventType: { userId: Number(id) } },
       include: { eventType: { include: { user: true } } },
     });
     if (event === null) {

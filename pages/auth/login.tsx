@@ -59,8 +59,6 @@ const Login = ({ csrfToken }: ServerSideProps) => {
     }
   };
 
-  console.log({ csrfToken });
-
   return (
     <>
       <div className="flex items-center justify-center w-screen h-screen bg-secondary">

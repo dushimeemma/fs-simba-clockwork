@@ -3,6 +3,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { Backdrop, CircularProgress } from "@mui/material";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useQuery } from "react-query";
 
@@ -10,9 +11,15 @@ import Shell from "@components/Shell";
 import Sidebar from "@components/shared/Sidebar";
 
 const Bookings = () => {
+  const { data: session } = useSession();
   const getAllEvents = async () => {
-    const { data } = await axios.get("/api/events");
-    return data;
+    if (session !== undefined && session !== null) {
+      const { data } = await axios.get(`/api/events/${session.id}`);
+      return data;
+    } else {
+      const { data } = await axios.get("/api/events");
+      return data;
+    }
   };
 
   const { data, isLoading } = useQuery("events", getAllEvents);
