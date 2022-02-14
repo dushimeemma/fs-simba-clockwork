@@ -1,4 +1,8 @@
-Description Type of change [ ] Bug fix (Non breaking change that fixes an existing issue)
+Description
+
+Type of change
+
+[ ] Bug fix (Non breaking change that fixes an existing issue)
 
 [ ] New Feature (Non breaking change which adds funcitonality)
 
@@ -6,7 +10,9 @@ Description Type of change [ ] Bug fix (Non breaking change that fixes an existi
 
 [ ] This change requires a documentation update
 
-How Has This Been Tested? [ ] Unit tests
+How Has This Been Tested?
+
+[ ] Unit tests
 
 [ ] Component Tests
 
@@ -14,15 +20,17 @@ How Has This Been Tested? [ ] Unit tests
 
 How Should This Be Manually tested:
 
-Clone this repo git clone https://github.com/dushimeemma/fs-simba-cal/.
+Clone this repo.
 
-Checkout the branch git checkout branch_name
+Checkout the branch
 
 Run yarn install
 
 Run yarn dev
 
-Checklist: [ ] My code follows all the styles and conventions outlined for this project
+Checklist:
+
+[ ] My code follows all the styles and conventions outlined for this project
 
 [ ] I have linted my code before submission
 
@@ -34,4 +42,6 @@ Checklist: [ ] My code follows all the styles and conventions outlined for this 
 
 [ ] New and existing tests pass locally with my changes
 
-JIRA issue-id
+JIRA
+
+[issue-id]()
